@@ -1,0 +1,290 @@
+{
+	"info": {
+		"_postman_id": "11cf30ce-1856-4e1d-a91c-e892aa121902",
+		"name": "accounts",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "getUsers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/user",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "1f198651-b115-42a1-a151-77e813967cf1",
+								"exec": [
+									"var response = JSON.parse(responseBody)",
+									"postman.setEnvironmentVariable(\"userId\", response.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"cpf\": \"123\",\n\t\"name\": \"Jhon Doe\"\n}"
+						},
+						"url": {
+							"raw": "localhost:8000/user",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "account",
+			"item": [
+				{
+					"name": "getAccount",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/account/{{accountNumber}}",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"account",
+								"{{accountNumber}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createAccount",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "360e028f-048f-4d0a-8c5e-a43b16b4ec88",
+								"exec": [
+									"var response = JSON.parse(responseBody)",
+									"postman.setEnvironmentVariable(\"accountNumber\", response.accountNumber);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"user\": \"{{userId}}\",\n\t\"debtLimit\": 10\n}"
+						},
+						"url": {
+							"raw": "localhost:8000/account",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"account"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "transfer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "360e028f-048f-4d0a-8c5e-a43b16b4ec88",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"from\":\"{{accountNumber}}\",\n\t\"to\": \"ed6e09f6-3f5f-41d7-ab7d-cf654bfa31d0\",\n\t\"value\": 2\n}"
+						},
+						"url": {
+							"raw": "localhost:8000/account/transfer",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"account",
+								"transfer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deposit",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "360e028f-048f-4d0a-8c5e-a43b16b4ec88",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"to\":\"{{accountNumber}}\",\n\t\"value\": 10\n}"
+						},
+						"url": {
+							"raw": "localhost:8000/account/deposit",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"account",
+								"deposit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "withdraw",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "360e028f-048f-4d0a-8c5e-a43b16b4ec88",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"type": "text",
+								"value": "",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"from\":\"{{accountNumber}}\",\n\t\"value\": 1\n}"
+						},
+						"url": {
+							"raw": "localhost:8000/account/withdraw",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"account",
+								"withdraw"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

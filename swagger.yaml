@@ -1,0 +1,318 @@
+swagger: "2.0"
+info:
+  description: ""
+  version: "1.0.0"
+  title: "Accounts tranfer manager"
+  termsOfService: ""
+  contact:
+    email: "marcospaulo.vilelasantos@gmail.com.br"
+host: "localhost:8000"
+basePath: "/"
+tags:
+- name: "user"
+  description: "control the users"
+
+schemes:
+- "http"
+paths:
+  /user:
+    post:
+      tags:
+      - "user"
+      summary: "Add a new user to system"
+      description: ""
+      operationId: "addUser"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "user create request"
+        required: true
+        schema:
+          $ref: "#/definitions/CreateUserRequest"
+      responses:
+        201:
+          description: "user created"
+          schema:
+            $ref: "#/definitions/CreateUserRequest"
+            
+    get:
+      tags:
+      - "user"
+      summary: "list all users of systems"
+      description: ""
+      operationId: "listUsers"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      
+      responses:
+        200:
+          description: "user created"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/User"
+              
+  /account:
+    post:
+      tags:
+      - "account"
+      summary: "create new account"
+      description: ""
+      operationId: "addAccount"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "create account request"
+        required: true
+        schema:
+          type: object
+          properties:
+            user:
+              type: string
+              description: "userid owner of the account"
+            debtLimit:
+              type: number
+              format: double
+              description: "limit of negative balance of account"
+            
+      responses:
+        201:
+          description: "account created"
+          schema:
+            $ref: "#/definitions/Account"
+  
+  /account/{accountNumber}:
+    get:
+      tags:
+      - "account"
+      summary: "get account"
+      description: ""
+      operationId: "findAccount"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+        - in: path
+          name: accountNumber
+          required: true
+          type: string
+          description: The account number
+      
+      responses:
+          200:
+            description: ""
+            schema:
+              $ref: "#/definitions/Account"
+          404:
+            description: "not found"
+
+  /account/deposit:
+    post:
+      tags:
+      - "account"
+      summary: "deposit on account"
+      description: ""
+      operationId: "deposit"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: ""
+        required: true
+        schema:
+          type: object
+          properties:
+            to:
+              type: string
+              description: "account number"
+            value:
+              type: number
+              format: double
+              description: "value to deposit"
+            
+      responses:
+        200:
+          description: "deposit confirmation"
+          schema:
+            $ref: "#/definitions/Operation"
+        412:
+          description: "precondition failed"
+          schema:
+            $ref: "#/definitions/error"
+        500:
+          description: "internal server error"
+          schema:
+            $ref: "#/definitions/error"    
+        
+
+  /account/withdraw:
+    post:
+      tags:
+      - "account"
+      summary: "withdraw from account"
+      description: ""
+      operationId: "withdraw"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: ""
+        required: true
+        schema:
+          type: object
+          properties:
+            from:
+              type: string
+              description: "account number"
+            value:
+              type: number
+              format: double
+              description: "value to withdraw"
+            
+      responses:
+        200:
+          description: "withdraw confirmation"
+          schema:
+            $ref: "#/definitions/Operation"
+        412:
+          description: "precondition failed"
+          schema:
+            $ref: "#/definitions/error"
+        500:
+          description: "internal server error"
+          schema:
+            $ref: "#/definitions/error"    
+
+  /account/tranfer:
+    post:
+      tags:
+      - "account"
+      summary: "tranfer from account to another"
+      description: ""
+      operationId: "tranference"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: ""
+        required: true
+        schema:
+          type: object
+          properties:
+            to:
+              type: string
+              description: "account number"
+            from:
+              type: string
+              description: "account number"
+            value:
+              type: number
+              format: double
+              description: "value to transfer"
+            
+      responses:
+        200:
+          description: "transference confirmation"
+          schema:
+            $ref: "#/definitions/Operation"
+        412:
+          description: "precondition failed"
+          schema:
+            $ref: "#/definitions/error"
+        500:
+          description: "internal server error"
+          schema:
+            $ref: "#/definitions/error"   
+            
+definitions:
+  error:
+    type: object
+    properties:
+      message: 
+        type: string
+          
+  Operation:
+    type: object
+    properties:
+      id:
+       type: string
+      type: 
+        type: string
+        description: "type of operation maked"
+        enum:
+          - "DEPOSIT"
+          - "WITHDRAW"
+          - "TRANFERENCE"
+      value:
+        type: number
+        format: double
+      time:
+        type: string
+        format: date-time
+
+
+  Account:
+    type: "object"
+    properties:
+      accountNumber:
+        type: string
+        description: "account number of reference"
+      balance:
+        type:  number
+        format: double
+        description: "account balance"
+      debtLimit: 
+        type: number
+        format: double
+        description: "limit of negative balance of account"
+      extract:
+        type: array
+        items:
+          $ref: "#/definitions/Operation"
+        
+  CreateUserRequest:
+    type: "object"
+    properties:
+      cpf:
+        type: "string"
+        description: "user cpf"
+      name:
+        type: "string"
+        description: "full name of the user"
+        
+  User:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+        description: "user id"
+      cpf:
+        type: "string"
+        description: "user cpf"
+      name:
+        type: "string"
+        description: "full name of the user"
+      accounts:
+        type: array
+        items:
+          $ref: "#/definitions/Account"
