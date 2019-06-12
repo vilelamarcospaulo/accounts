@@ -21,7 +21,7 @@ public class Application {
     }
 
     public static void main(String[] args) {
-        Integer port = 8001;
+        Integer port = 8000;
 
         // server configuration
         Spark.port(port);
