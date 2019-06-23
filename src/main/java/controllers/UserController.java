@@ -3,13 +3,13 @@ package controllers;
 import controllers.request.UserPostRequest;
 import service.UserService;
 import service.command.CreateUserCommand;
-import service.dto.UserDTO;
 import spark.Request;
 import spark.Response;
 import spark.Route;
-import utils.JsonUtils;
 
-public class UserController {
+import java.util.function.Function;
+
+public class UserController extends Controller {
     public static UserService userService;
 
     public static Route get = (Request request, Response response) -> {
@@ -17,12 +17,9 @@ public class UserController {
     };
 
     public static Route post = (Request request, Response response) -> {
-        UserPostRequest userRequest = JsonUtils.readFromJson(request.body(), UserPostRequest.class);
-        userRequest.validate();
+        Function<UserPostRequest, CreateUserCommand> toCommand = userRequest ->
+                CreateUserCommand.newBuilder().cpf(userRequest.getCpf()).name(userRequest.getName()).build();
 
-        CreateUserCommand createUserCommand = CreateUserCommand.newBuilder().cpf(userRequest.getCpf()).name(userRequest.getName()).build();
-        UserDTO user = userService.createUser(createUserCommand);
-
-        return user;
+        return execute(request.body(), UserPostRequest.class, toCommand, userService::createUser);
     };
 }

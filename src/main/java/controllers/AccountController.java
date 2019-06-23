@@ -1,24 +1,20 @@
 package controllers;
 
-import controllers.exceptions.BussinessOutputException;
 import controllers.exceptions.NotFoundItemException;
 import controllers.request.*;
-import domain.exceptions.BussinessException;
+
 import service.AccountService;
 import service.command.CreateAccountCommand;
 import service.command.DepositOnAccountCommand;
 import service.command.TransferBetweenAccountsCommand;
 import service.command.WithdrawFromAccountCommand;
-import service.exceptions.ServiceException;
+
 import spark.Request;
 import spark.Response;
 import spark.Route;
-import utils.JsonUtils;
-
-import java.io.IOException;
 import java.util.function.Function;
 
-public class AccountController {
+public class AccountController extends Controller {
 
     public static AccountService accountService;
 
@@ -66,24 +62,4 @@ public class AccountController {
 
         return execute(request.body(), WithdrawRequest.class, toCommand, accountService::withdrawFromAccount);
     };
-
-
-    private static <T extends RequestObject, R> Object execute (
-            String jsonInput,
-            Class<T> inputClazz,
-            Function<T, R> toCommand,
-            ProcessCommand<R, Object> operation
-    ) throws IOException {
-        try {
-            T input = JsonUtils.readFromJson(jsonInput, inputClazz);
-            input.validate();
-
-            R command = toCommand.apply(input);
-            return operation.apply(command);
-        } catch (ServiceException exception) {
-            throw new BussinessOutputException(exception.fullMessage());
-        } catch (BussinessException exception) {
-            throw new BussinessOutputException(exception.fullMessage());
-        }
-    }
 }
