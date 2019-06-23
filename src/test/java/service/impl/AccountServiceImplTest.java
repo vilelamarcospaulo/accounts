@@ -1,10 +1,10 @@
 package service.impl;
 
 import datastore.AccountRepository;
-
 import datastore.UserRepository;
 import domain.Account;
 import domain.User;
+import domain.exceptions.BussinessException;
 import domain.exceptions.BussinessExceptions;
 import org.junit.Assert;
 import org.junit.Before;
@@ -98,7 +98,7 @@ public class AccountServiceImplTest {
 
 
     @Test
-    public void transfer() throws BussinessExceptions.InvalidValueToOperation, ServiceExceptions.AccountNotFound, BussinessExceptions.InsulficientFoundsForTransfer, BussinessExceptions.InvalidDebtLimitsForAccount, BussinessExceptions.InvalidOwnerToAccount, BussinessExceptions.InvalidAccountToTransfer {
+    public void transfer() throws BussinessException, ServiceExceptions.AccountNotFound {
         // MOCK
         User mockedUser = User.createUser("123", "Jhon Doe");
         Account mockedAccount =  Account.createAccount(mockedUser, BigDecimal.TEN);
@@ -135,7 +135,7 @@ public class AccountServiceImplTest {
 
 
     @Test(expected = BussinessExceptions.InsulficientFoundsForTransfer.class)
-    public void transferWithoutFound() throws BussinessExceptions.InvalidValueToOperation, ServiceExceptions.AccountNotFound, BussinessExceptions.InsulficientFoundsForTransfer, BussinessExceptions.InvalidDebtLimitsForAccount, BussinessExceptions.InvalidOwnerToAccount, BussinessExceptions.InvalidAccountToTransfer {
+    public void transferWithoutFound() throws BussinessException, ServiceExceptions.AccountNotFound {
         // MOCK
         User mockedUser = User.createUser("123", "Jhon Doe");
         Account mockedAccount =  Account.createAccount(mockedUser, BigDecimal.ZERO);
@@ -160,7 +160,7 @@ public class AccountServiceImplTest {
     }
 
     @Test(expected = ServiceExceptions.AccountNotFound.class)
-    public void transferFromAccountNotFound() throws BussinessExceptions.InvalidValueToOperation, ServiceExceptions.AccountNotFound, BussinessExceptions.InsulficientFoundsForTransfer, BussinessExceptions.InvalidDebtLimitsForAccount, BussinessExceptions.InvalidOwnerToAccount, BussinessExceptions.InvalidAccountToTransfer {
+    public void transferFromAccountNotFound() throws BussinessException, ServiceExceptions.AccountNotFound {
         // MOCK
         User mockedUser = User.createUser("123", "Jhon Doe");
         Account mockedAccount =  Account.createAccount(mockedUser, BigDecimal.ZERO);
@@ -185,7 +185,7 @@ public class AccountServiceImplTest {
     }
 
     @Test(expected = ServiceExceptions.AccountNotFound.class)
-    public void transferToAccountNotFound() throws BussinessExceptions.InvalidValueToOperation, ServiceExceptions.AccountNotFound, BussinessExceptions.InsulficientFoundsForTransfer, BussinessExceptions.InvalidDebtLimitsForAccount, BussinessExceptions.InvalidOwnerToAccount, BussinessExceptions.InvalidAccountToTransfer {
+    public void transferToAccountNotFound() throws BussinessException, ServiceExceptions.AccountNotFound {
         // MOCK
         User mockedUser = User.createUser("123", "Jhon Doe");
         Account mockedAccount =  Account.createAccount(mockedUser, BigDecimal.ZERO);
@@ -210,7 +210,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void depositOnAccount() throws BussinessExceptions.InvalidValueToOperation, ServiceExceptions.AccountNotFound, BussinessExceptions.InvalidDebtLimitsForAccount, BussinessExceptions.InvalidOwnerToAccount {
+    public void depositOnAccount() throws BussinessException, ServiceExceptions.AccountNotFound {
         // MOCK
         User mockedUser = User.createUser("123", "Jhon Doe");
         Account mockedAccount =  Account.createAccount(mockedUser, BigDecimal.ZERO);
@@ -233,7 +233,7 @@ public class AccountServiceImplTest {
     }
 
     @Test(expected = ServiceExceptions.AccountNotFound.class)
-    public void depositOnAccountNotFound() throws BussinessExceptions.InvalidValueToOperation, ServiceExceptions.AccountNotFound, BussinessExceptions.InvalidDebtLimitsForAccount, BussinessExceptions.InvalidOwnerToAccount {
+    public void depositOnAccountNotFound() throws BussinessException, ServiceExceptions.AccountNotFound {
         // MOCK
         User mockedUser = User.createUser("123", "Jhon Doe");
         Account mockedAccount =  Account.createAccount(mockedUser, BigDecimal.ZERO);
@@ -252,7 +252,7 @@ public class AccountServiceImplTest {
     }
 
     @Test
-    public void withdrawFromAccount() throws BussinessExceptions.InvalidValueToOperation, ServiceExceptions.AccountNotFound, BussinessExceptions.InsulficientFoundsForWithdraw, BussinessExceptions.InvalidDebtLimitsForAccount, BussinessExceptions.InvalidOwnerToAccount {
+    public void withdrawFromAccount() throws BussinessException, ServiceExceptions.AccountNotFound {
         // MOCK
         User mockedUser = User.createUser("123", "Jhon Doe");
         Account mockedAccount =  Account.createAccount(mockedUser, BigDecimal.TEN);
@@ -273,5 +273,4 @@ public class AccountServiceImplTest {
         Assert.assertNotNull(withdrawDTO );
         Assert.assertEquals(mockedAccount.getBalance(), BigDecimal.valueOf(-5));
     }
-
 }

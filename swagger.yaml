@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   description: ""
   version: "1.0.0"
-  title: "Accounts tranfer manager"
+  title: "Accounts transfer manager"
   termsOfService: ""
   contact:
     email: "marcospaulo.vilelasantos@gmail.com.br"
@@ -200,13 +200,13 @@ paths:
           schema:
             $ref: "#/definitions/error"    
 
-  /account/tranfer:
+  /account/transfer:
     post:
       tags:
       - "account"
-      summary: "tranfer from account to another"
+      summary: "transfer from account to another"
       description: ""
-      operationId: "tranference"
+      operationId: "transference"
       consumes:
       - "application/json"
       produces:

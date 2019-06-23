@@ -7,6 +7,7 @@ import domain.User;
 import domain.accountoperations.Deposit;
 import domain.accountoperations.Transference;
 import domain.accountoperations.Withdraw;
+import domain.exceptions.BussinessException;
 import domain.exceptions.BussinessExceptions;
 import org.mapstruct.factory.Mappers;
 import service.AccountService;
@@ -51,22 +52,22 @@ public class AccountServiceImpl implements AccountService {
                         user.createAccount(createAccountCommand.getDebtLimit())));
     }
 
-    public TransferenceDTO transfer(TransferBetweenAccountsCommand transferBetweenAccountsCommand) throws ServiceExceptions.AccountNotFound, BussinessExceptions.InvalidValueToOperation, BussinessExceptions.InsulficientFoundsForTransfer, BussinessExceptions.InvalidAccountToTransfer {
+    public TransferenceDTO transfer(TransferBetweenAccountsCommand transferBetweenAccountsCommand) throws ServiceExceptions.AccountNotFound, BussinessException {
         Account accountFrom = this.findByAccountNumberOrThrowNotFound(transferBetweenAccountsCommand.getFrom());
         Account accountTo = this.findByAccountNumberOrThrowNotFound(transferBetweenAccountsCommand.getTo());
 
-        Transference transference = accountFrom.tranferTo(accountTo, transferBetweenAccountsCommand.getValue());
-        return this.accountOperationMapper.tranferenceToDTO(transference);
+        Transference transference = accountFrom.transferTo(accountTo, transferBetweenAccountsCommand.getValue());
+        return this.accountOperationMapper.transferenceToDTO(transference);
     }
 
-    public DepositDTO depositOnAccount(DepositOnAccountCommand depositOnAccountCommand) throws ServiceExceptions.AccountNotFound, BussinessExceptions.InvalidValueToOperation {
+    public DepositDTO depositOnAccount(DepositOnAccountCommand depositOnAccountCommand) throws ServiceExceptions.AccountNotFound, BussinessException {
         Account accountTo = this.findByAccountNumberOrThrowNotFound(depositOnAccountCommand.getAccount());
         Deposit deposit = accountTo.deposit(depositOnAccountCommand.getValue());
 
         return this.accountOperationMapper.depositToDTO(deposit);
     }
 
-    public WithdrawDTO withdrawFromAccount(WithdrawFromAccountCommand withdrawFromAccountCommand) throws ServiceExceptions.AccountNotFound, BussinessExceptions.InvalidValueToOperation, BussinessExceptions.InsulficientFoundsForWithdraw {
+    public WithdrawDTO withdrawFromAccount(WithdrawFromAccountCommand withdrawFromAccountCommand) throws ServiceExceptions.AccountNotFound, BussinessException {
         Account accountTo = this.findByAccountNumberOrThrowNotFound(withdrawFromAccountCommand.getAccount());
         Withdraw withdraw = accountTo.withdraw(withdrawFromAccountCommand.getValue());
 

@@ -10,7 +10,7 @@ import service.dto.WithdrawDTO;
 
 @Mapper
 public interface AccountOperationMapper {
-    TransferenceDTO tranferenceToDTO(Transference tranference);
+    TransferenceDTO transferenceToDTO(Transference transference);
     DepositDTO depositToDTO(Deposit deposit);
     WithdrawDTO withdrawToDTO(Withdraw withdraw);
 }

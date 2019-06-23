@@ -1,6 +1,7 @@
 package domain;
 
 import domain.accountoperations.Deposit;
+import domain.exceptions.BussinessException;
 import domain.exceptions.BussinessExceptions;
 import org.junit.Assert;
 import org.junit.Before;
@@ -39,7 +40,7 @@ public class AccountTest {
     }
 
     @Test
-    public void depositOnAccount() throws BussinessExceptions.InvalidValueToOperation, BussinessExceptions.InvalidDebtLimitsForAccount, BussinessExceptions.InvalidOwnerToAccount {
+    public void depositOnAccount() throws BussinessException {
         Account account = Account.createAccount(this.user, BigDecimal.ZERO);
         Deposit deposit = account.deposit(BigDecimal.TEN);
 
@@ -59,13 +60,13 @@ public class AccountTest {
     }
 
     @Test(expected = BussinessExceptions.InvalidValueToOperation.class)
-    public void depositOnAccountNegativaValue() throws BussinessExceptions.InvalidValueToOperation, BussinessExceptions.InvalidDebtLimitsForAccount, BussinessExceptions.InvalidOwnerToAccount {
+    public void depositOnAccountNegativaValue() throws BussinessException {
         Account account = Account.createAccount(this.user, BigDecimal.ZERO);
         account.deposit(BigDecimal.valueOf(-10));
     }
 
     @Test
-    public void withdrawOnAccount() throws BussinessExceptions.InvalidValueToOperation, BussinessExceptions.InsulficientFoundsForWithdraw, BussinessExceptions.InvalidDebtLimitsForAccount, BussinessExceptions.InvalidOwnerToAccount {
+    public void withdrawOnAccount() throws BussinessException {
         Account account = Account.createAccount(this.user, BigDecimal.ZERO);
         account.deposit(BigDecimal.valueOf(10));
         account.withdraw(BigDecimal.valueOf(5));
@@ -78,7 +79,7 @@ public class AccountTest {
     }
 
     @Test
-    public void withdrawAllBalance() throws BussinessExceptions.InvalidValueToOperation, BussinessExceptions.InsulficientFoundsForWithdraw, BussinessExceptions.InvalidDebtLimitsForAccount, BussinessExceptions.InvalidOwnerToAccount {
+    public void withdrawAllBalance() throws BussinessException {
         Account account = Account.createAccount(this.user, BigDecimal.ZERO);
         account.deposit(BigDecimal.valueOf(10));
         account.withdraw(BigDecimal.valueOf(10));
@@ -87,21 +88,21 @@ public class AccountTest {
     }
 
     @Test(expected = BussinessExceptions.InsulficientFoundsForWithdraw.class)
-    public void withdrawOnAccountNoLimit() throws BussinessExceptions.InvalidValueToOperation, BussinessExceptions.InsulficientFoundsForWithdraw, BussinessExceptions.InvalidDebtLimitsForAccount, BussinessExceptions.InvalidOwnerToAccount {
+    public void withdrawOnAccountNoLimit() throws BussinessException {
         Account account = Account.createAccount(this.user, BigDecimal.ZERO);
         account.deposit(BigDecimal.valueOf(10));
         account.withdraw(BigDecimal.valueOf(15));
     }
 
     @Test
-    public void tranferTo() throws BussinessExceptions.InvalidValueToOperation, BussinessExceptions.InsulficientFoundsForTransfer, BussinessExceptions.InvalidDebtLimitsForAccount, BussinessExceptions.InvalidOwnerToAccount, BussinessExceptions.InvalidAccountToTransfer {
+    public void transferTo() throws BussinessException {
         User user2 = User.createUser("123", "Mariah Doe");
 
         Account account = Account.createAccount(this.user, BigDecimal.ZERO);
         Account account2 = Account.createAccount(user2, BigDecimal.ZERO);
 
         account.deposit(BigDecimal.TEN);
-        account.tranferTo(account2, BigDecimal.valueOf(5));
+        account.transferTo(account2, BigDecimal.valueOf(5));
 
         Assert.assertEquals(2l, account.getExtract().size());
         Assert.assertEquals(1l, account2.getExtract().size());
@@ -114,21 +115,21 @@ public class AccountTest {
     }
 
     @Test(expected = BussinessExceptions.InvalidAccountToTransfer.class)
-    public void tranferToSameAccount() throws BussinessExceptions.InvalidValueToOperation, BussinessExceptions.InsulficientFoundsForTransfer, BussinessExceptions.InvalidDebtLimitsForAccount, BussinessExceptions.InvalidOwnerToAccount, BussinessExceptions.InvalidAccountToTransfer {
+    public void transferToSameAccount() throws BussinessException {
         Account account = Account.createAccount(this.user, BigDecimal.ZERO);
 
         account.deposit(BigDecimal.TEN);
-        account.tranferTo(account, BigDecimal.valueOf(5));
+        account.transferTo(account, BigDecimal.valueOf(5));
 
     }
 
     @Test(expected = BussinessExceptions.InsulficientFoundsForTransfer.class)
-    public void tranferToWithouFounds() throws BussinessExceptions.InvalidValueToOperation, BussinessExceptions.InsulficientFoundsForTransfer, BussinessExceptions.InvalidDebtLimitsForAccount, BussinessExceptions.InvalidOwnerToAccount, BussinessExceptions.InvalidAccountToTransfer {
+    public void transferToWithouFounds() throws BussinessException {
         User user2 = User.createUser("123", "Mariah Doe");
 
         Account account = Account.createAccount(this.user, BigDecimal.ZERO);
         Account account2 = Account.createAccount(user2, BigDecimal.ZERO);
 
-        account.tranferTo(account2, BigDecimal.TEN);
+        account.transferTo(account2, BigDecimal.TEN);
     }
 }
