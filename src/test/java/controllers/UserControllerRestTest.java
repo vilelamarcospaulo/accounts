@@ -26,14 +26,14 @@ public class UserControllerRestTest extends GenericRestTest {
     }
 
     @Test
-    public void findUsersWithoutuser() {
+    public void findUsersWithoutUser() {
         TestResponse testResponse = super.request("GET", "/user");
         Assert.assertEquals(200, testResponse.status);
         Assert.assertEquals("[]", testResponse.body);
     }
 
     @Test
-    public void createUsers() {
+    public void createUser() {
         TestResponse testResponse = super.request("POST", "/user", "{\n" +
                 "\"cpf\": \"123\",\n" +
                 "\"name\": \"Jhon Doe\"\n" +
@@ -42,10 +42,32 @@ public class UserControllerRestTest extends GenericRestTest {
         Assert.assertEquals(201, testResponse.status);
     }
 
+    @Test
+    public void createUserWithoutCpf() {
+        TestResponse testResponse = super.request("POST", "/user", "{\n" +
+                "\"cpf\": \"\",\n" +
+                "\"name\": \"Jhon Doe\"\n" +
+                "}");
+
+        Assert.assertEquals(400, testResponse.status);
+        Assert.assertEquals("{\"message\":\"Field cpf can`t be null or empty\"}", testResponse.body);
+    }
+
+    @Test
+    public void createUserWithoutName() {
+        TestResponse testResponse = super.request("POST", "/user", "{\n" +
+                "\"cpf\": \"123\",\n" +
+                "\"name\": \"\"\n" +
+                "}");
+
+        Assert.assertEquals(400, testResponse.status);
+        Assert.assertEquals("{\"message\":\"Field name can`t be null or empty\"}", testResponse.body);
+    }
+
 
     @Test
     public void findUsersWithUser() throws IOException {
-        this.createUsers();
+        this.createUser();
         TestResponse testResponse = super.request("GET", "/user");
 
         Assert.assertEquals(200, testResponse.status);

@@ -32,7 +32,6 @@ public class AccountControllerRestTest extends GenericRestTest {
         Assert.assertEquals(404, testResponse.status);
     }
 
-
     @Test
     public void createAccountWithNotExistentUser() {
         TestResponse testResponse = super.request("POST", "/account", "{\n" +
@@ -59,6 +58,30 @@ public class AccountControllerRestTest extends GenericRestTest {
         "}");
 
         Assert.assertEquals(201, testResponse.status);
+    }
+
+    @Test
+    public void findAccount() throws IOException {
+        TestResponse testResponse = super.request("POST", "/user", "{\n" +
+                "\"cpf\": \"123\",\n" +
+                "\"name\": \"Jhon Doe\"\n" +
+                "}");
+
+        UserDTO createdUser = JsonUtils.readFromJson(testResponse.body, UserDTO.class);
+
+        testResponse = super.request("POST", "/account", "{\n" +
+                "\"user\": \"" + createdUser.getId() + "\",\n" +
+                "\"debtLimit\": 10\n" +
+                "}");
+
+        AccountDTO createdAccount = JsonUtils.readFromJson(testResponse.body, AccountDTO.class);
+
+        testResponse = super.request("GET", "/account/" + createdAccount.getAccountNumber());
+        AccountDTO findedAccount = JsonUtils.readFromJson(testResponse.body, AccountDTO.class);
+
+        Assert.assertEquals(200, testResponse.status);
+        Assert.assertEquals(createdAccount.getAccountNumber(), findedAccount.getAccountNumber());
+        Assert.assertEquals(createdAccount.getBalance(), findedAccount.getBalance());
     }
 
     @Test
