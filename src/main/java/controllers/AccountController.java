@@ -44,7 +44,6 @@ public class AccountController extends Controller {
         return execute(request.body(), AccountTransferRequest.class, toCommand, accountService::transfer);
     };
 
-
     public static Route deposit = (Request request, Response response) -> {
         Function<DepositRequest, DepositOnAccountCommand> toCommand = depositRequest -> DepositOnAccountCommand.newBuilder()
                 .account(depositRequest.getTo())
