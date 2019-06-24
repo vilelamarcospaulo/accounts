@@ -20,6 +20,7 @@ public class UserController extends Controller {
         Function<UserPostRequest, CreateUserCommand> toCommand = userRequest ->
                 CreateUserCommand.newBuilder().cpf(userRequest.getCpf()).name(userRequest.getName()).build();
 
+        response.status(201);
         return execute(request.body(), UserPostRequest.class, toCommand, userService::createUser);
     };
 }

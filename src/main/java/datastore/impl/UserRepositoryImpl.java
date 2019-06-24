@@ -5,9 +5,13 @@ import domain.User;
 
 
 public class UserRepositoryImpl extends RepositoryImpl<User> implements UserRepository {
-    private static final UserRepository userRepository = new UserRepositoryImpl();
+    private static UserRepository userRepository = new UserRepositoryImpl();
 
     private UserRepositoryImpl() {}
 
     public static UserRepository getInstance() { return UserRepositoryImpl.userRepository; }
+
+    public static void initializeInstance() {
+        UserRepositoryImpl.userRepository = new UserRepositoryImpl();
+    }
 }

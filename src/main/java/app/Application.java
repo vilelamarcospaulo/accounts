@@ -1,8 +1,12 @@
+package app;
+
 import applicationconf.EmbeddedJettyFactoryConstructor;
 import applicationconf.RequestLogFactory;
 import controllers.exceptions.BussinessOutputException;
 import controllers.exceptions.NotFoundItemException;
 import controllers.response.ErrorResponse;
+import datastore.impl.AccountRepositoryImpl;
+import datastore.impl.UserRepositoryImpl;
 import org.apache.log4j.Logger;
 import org.eclipse.jetty.server.AbstractNCSARequestLog;
 import routes.AccountRoutes;
@@ -23,6 +27,10 @@ public class Application {
     public static void main(String[] args) {
         Integer port = 8001;
 
+        // Repository Dependencies
+        AccountRepositoryImpl.initializeInstance();
+        UserRepositoryImpl.initializeInstance();
+
         // server configuration
         Spark.port(port);
 
@@ -31,7 +39,6 @@ public class Application {
 
         // server pages
         Spark.notFound("");
-
 
         //Exceptions
         Spark.exception(ValidationException.class, ((validationException, request, response) -> {

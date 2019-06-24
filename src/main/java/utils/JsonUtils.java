@@ -1,5 +1,6 @@
 package utils;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -17,6 +18,10 @@ public class JsonUtils {
 
     public static <T> T readFromJson(String json, Class<T> clazz) throws IOException {
         return getObjectMapper().readValue(json, clazz);
+    }
+
+    public static <T> T readFromJson(String json, TypeReference typeReference) throws IOException {
+        return getObjectMapper().readValue(json, typeReference);
     }
 
     public static <T> String writeToJson(T obj) {
