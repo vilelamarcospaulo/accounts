@@ -25,7 +25,7 @@ public class GenericRestTest {
         }
     }
 
-    private String server = "http://localhost:8001/";
+    private String server = "http://localhost:8000/";
     protected TestResponse request(String method, String uri) {
         return this.request(method, uri, null);
     }

@@ -25,7 +25,7 @@ public class Application {
     }
 
     public static void main(String[] args) {
-        Integer port = 8001;
+        Integer port = 8000;
 
         // Repository Dependencies
         AccountRepositoryImpl.initializeInstance();
@@ -45,6 +45,7 @@ public class Application {
             response.status(400);
             response.body(new ErrorResponse(validationException.getMessage()).toJson());
         }));
+
 
         Spark.exception(IOException.class, ((validationException, request, response) -> {
             response.status(400);
