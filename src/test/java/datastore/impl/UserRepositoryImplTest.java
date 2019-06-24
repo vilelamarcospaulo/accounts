@@ -56,6 +56,8 @@ public class UserRepositoryImplTest {
 
         User deletedUser = userRepository.delete(user.getId());
         Assert.assertEquals(user, deletedUser);
+
+        Assert.assertFalse(userRepository.find(deletedUser.getId()).isPresent());
     }
 
     @Test
@@ -74,7 +76,7 @@ public class UserRepositoryImplTest {
         List<User> usersFromBase = userRepository.getAll();
 
         Assert.assertEquals(users.size(), usersFromBase.size());
-        IntStream.range(0, users.size()).forEach(i -> Assert.assertEquals(users.get(i), usersFromBase.get(i)));
+        usersFromBase.forEach(it -> Assert.assertTrue(users.contains(it)));
     }
 
 
